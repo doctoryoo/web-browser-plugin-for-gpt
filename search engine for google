@@ -2,9 +2,9 @@ import openai
 import os
 from googleapiclient.discovery import build
 
-OPENAI_API_KEY = "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" 
-GOOGLE_API_KEY = "AIzaSyAfxbqRG2mA9JWSdFWU0Xxgk4hRzXsScdM"
-GOOGLE_CSE_ID = "00e38e8d70f264cc8"
+OPENAI_API_KEY = "openakey" 
+GOOGLE_API_KEY = "googleapikey"
+GOOGLE_CSE_ID = "googleapikey"
 
 openai.api_key = OPENAI_API_KEY
 
