@@ -1,0 +1,45 @@
+import openai
+import os
+from googleapiclient.discovery import build
+
+OPENAI_API_KEY = "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" 
+GOOGLE_API_KEY = "AIzaSyAfxbqRG2mA9JWSdFWU0Xxgk4hRzXsScdM"
+GOOGLE_CSE_ID = "00e38e8d70f264cc8"
+
+openai.api_key = OPENAI_API_KEY
+
+def search_google(query, api_key, custom_search_engine_id):
+    service = build("customsearch", "v1", developerKey=api_key)
+    results = service.cse().list(q=query, cx=custom_search_engine_id).execute()
+    
+    return results
+    
+def ask_gpt(prompt):
+    response = openai.Completion.create(
+        engine="davinci",
+        prompt=prompt,
+        max_tokens=100,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+    return response.choices[0].text.strip()    
+
+def gpt_search(prompt):
+    gpt_response = ask_gpt(prompt)
+    search_results = search_google(gpt_response, GOOGLE_API_KEY, GOOGLE_CSE_ID)
+    
+    formatted_results = []
+    for index, item in enumerate(search_results["items"]):
+        formatted_results.append(f"{index + 1}. {item['title']} - {item['link']}")
+    
+    return formatted_results
+
+if __name__ == "__main__":
+    user_prompt = input("Enter your search query: ")
+    results = gpt_search(user_prompt)
+    
+    print("\nSearch results:")
+    for result in results:
+        print(result)
+
